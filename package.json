@@ -3,9 +3,6 @@
   "version": "0.1.1",
   "description": "A websocket lib for both node & browser, with promisify & auto reconnect.",
   "main": "index.js",
-  "peerDependencies": {
-    "ws": "*"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -25,5 +22,8 @@
   "homepage": "https://github.com/talrasha007/async-ws#readme",
   "devDependencies": {
     "ws": "^8.7.0"
+  },
+  "dependencies": {
+    "eventemitter3": "^4.0.7"
   }
 }

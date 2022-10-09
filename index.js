@@ -1,10 +1,9 @@
-const { EventEmitter } = require('events');
+import { EventEmitter } from 'eventemitter3';
 
-const WebSocket = global.WebSocket || require('ws');
-const addListenerFn = global.WebSocket ? 'addEventListener' : 'addListener';
-const removeListenerFn = global.WebSocket ? 'removeEventListener' : 'removeListener';
+const addListenerFn = 'addEventListener';
+const removeListenerFn = 'removeEventListener';
 
-module.exports = class extends EventEmitter {
+export default class WS extends EventEmitter {
   constructor(url, opt  = {}) {
     super();
 
