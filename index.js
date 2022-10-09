@@ -63,7 +63,7 @@ export default class WS extends EventEmitter {
     this._ws.send(data);
   }
 
-  async close(code, reason = '') {
+  async close(code = 1000, reason = '') {
     if (!this._closing && this._ws) {
       this._closing = true;
       this._ws.close(code, reason);
