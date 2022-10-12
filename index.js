@@ -24,14 +24,14 @@ export default class WS extends EventEmitter {
       this._ready = false;
       dispose();
       this.emit('close');
-      if (this.autoReconnect) connect();
+      if (this.autoReconnect && !this._closed) connect();
     };
 
     const onerror = (error) => {
       this._ready = false;
       dispose();
       this.emit('error', error);
-      if (this.autoReconnect) connect();
+      if (this.autoReconnect && !this._closed) connect();
     };
 
     const onmessage = (msg) => {
@@ -48,6 +48,7 @@ export default class WS extends EventEmitter {
       if (opt.binaryType) {
         this._ws.binaryType = opt.binaryType;
       }
+      this._closed = false;
     };
 
     this.autoReconnect = opt.autoReconnect !== false;
@@ -65,6 +66,7 @@ export default class WS extends EventEmitter {
 
   async close(code = 1000, reason = '') {
     if (!this._closing && this._ws) {
+      this._closed = true;
       this._closing = true;
       this._ws.close(code, reason);
       await new Promise(resolve => this.once('close', resolve));
@@ -75,7 +77,10 @@ export default class WS extends EventEmitter {
   async ready() {
     if (!this._ready) {
       if (!this._ws && !this.autoReconnect) this._connect();
-      await new Promise(resolve => this.once('open', resolve));
+      await new Promise((resolve, reject) => {
+        this.once('open', resolve);
+        this.once('error', reject);
+      });
     }
   }
 };
