@@ -53,10 +53,6 @@ export default class WS extends EventEmitter {
 
     this.autoReconnect = opt.autoReconnect !== false;
     this._connect = connect;
-
-    if (this.autoReconnect) {
-      connect();
-    }
   }
 
   async send(data) {
@@ -76,7 +72,7 @@ export default class WS extends EventEmitter {
 
   async ready() {
     if (!this._ready) {
-      if (!this._ws && !this.autoReconnect) this._connect();
+      if (!this._ws) this._connect();
       await new Promise((resolve, reject) => {
         this.once('open', resolve);
         this.once('error', reject);
